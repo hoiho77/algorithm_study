@@ -6,8 +6,13 @@
 필요한 바이트를 프로그램에 반환한다.
 당신은 프로그램의 성능을 테스트하기 위해 얼마나 많은 바이트들이 메모리에서 읽어지는지 확인하고 싶다. 프로그램이 읽는 바이트의 개수는 읽어들이는 순서에 맞게 addresses에 주어져있다. 프로그램이 시작할 때 base address는 0이다.
 
+n = 100
+k = 5
+addresses = [6,0,3,20,22,16]
+정답 :13
 '''
 
+''' 1차 시도 (시간 초과)
 class Solution:
     def solution(self, n, k, addresses):
         mem = [i for i in range(0, n)]
@@ -25,5 +30,30 @@ class Solution:
                 print(set(new_address) - set(base_address))
                 acc_count += len(set(new_address) - set(base_address))
                 base_address = new_address
+
+        return acc_count
+'''
+
+class Solution:
+    def solution(self, n, k, addresses):
+        max_ad = k - 1
+        min_ad = 0
+        acc_count = 0
+
+        for data in addresses:
+            if min_ad <= data <= max_ad:
+                continue
+            else:
+                if data > max_ad:
+                    count = data - max_ad if data - max_ad < k else k
+                    max_ad = data
+                    min_ad = data - k + 1
+
+                else:
+                    count = min_ad - data if min_ad - data < k else k
+                    max_ad = data + k - 1
+                    min_ad = data
+
+                acc_count += count
 
         return acc_count
